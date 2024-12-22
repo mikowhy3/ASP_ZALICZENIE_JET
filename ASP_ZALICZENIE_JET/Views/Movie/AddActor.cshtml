@@ -1,0 +1,43 @@
+﻿@model ASP_ZALICZENIE_JET.Models.Movies.AddActorViewModel
+
+
+@{
+ViewData["Title"] = "Add Actor";
+}
+
+<h2>@ViewData["Title"]</h2>
+<form asp-action="AddActor" asp-route-id="@Model.MovieId" method="post">
+    <input type="hidden" name="MovieId" value="@Model.MovieId" />
+
+    <div class="form-group">
+        <label asp-for="CharacterName" class="control-label"></label>
+        <input asp-for="CharacterName" class="form-control" />
+        <span asp-validation-for="CharacterName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PersonName" class="control-label"></label>
+        <input asp-for="PersonName" class="form-control" />
+        <span asp-validation-for="PersonName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="GenderId" class="control-label"></label>
+        <select asp-for="GenderId" class="form-control">
+            <option value="1">Mężczyzna</option>
+            <option value="2">Kobieta</option>
+        </select>
+        <span asp-validation-for="GenderId" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="CastOrder" class="control-label"></label>
+        <input asp-for="CastOrder" class="form-control" />
+        <span asp-validation-for="CastOrder" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Actor</button>
+    <a asp-action="Index">Back to List</a>
+</form>
+

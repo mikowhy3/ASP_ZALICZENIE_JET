@@ -1,0 +1,134 @@
+@model ASP_ZALICZENIE_JET.Models.Movies.PagingListAsync<ASP_ZALICZENIE_JET.Models.Movies.Movie>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    CancellationToken token = CancellationToken.None;
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.Budget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model=>model.Data.GetAsyncEnumerator(token).Current.ReleaseDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model=>model.Data.GetAsyncEnumerator(token).Current.Homepage)
+        </th>
+        
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @await foreach (var item in Model.Data) {
+        <tr>
+            <td>
+                <a asp-action="Details"  asp-route-id="@item.MovieId">@Html.DisplayFor(modelItem=>item.Title)</a>
+            </td>
+            <td class="text-end">
+                @Html.DisplayFor(modelItem => item.Budget)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReleaseDate)
+            </td>
+            <td>
+                @if (!string.IsNullOrEmpty(item.Homepage))
+                {
+                    <a href=@item.Homepage>Link to home page</a>
+                }
+                else
+                {
+                    <p>Brak</p>
+                }
+            </td>
+            
+        </tr>
+    }
+    </tbody>
+</table>
+<nav>
+    <ul class="pagination">
+        <!-- Przycisk 'Do pierwszej strony' -->
+        @if (!Model.IsFirst)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="1" asp-route-size="@Model.Size">Do pierwszej</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Do pierwszej</span>
+            </li>
+        }
+
+        <!-- Przyciski nawigacji 'Poprzednia' -->
+        @if (Model.IsPrevious)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-size="@Model.Size">Poprzednia</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Poprzednia</span>
+            </li>
+        }
+
+        <!-- Numer aktualnej strony -->
+        <li class="page-item disabled">
+            <span class="page-link">@Model.Page</span>
+        </li>
+
+        <!-- Przyciski nawigacji 'Następna' -->
+        @if (Model.IsNext)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.Page + 1)" asp-route-size="@Model.Size">Następna</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Następna</span>
+            </li>
+        }
+
+        <!-- Przycisk 'Do ostatniej strony' -->
+        @if (!Model.IsLast)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@Model.TotalPages" asp-route-size="@Model.Size">Do ostatniej</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Do ostatniej</span>
+            </li>
+        }
+        
+        <div>
+            <!-- Formularz wyboru strony -->
+            <li class="page-item">
+                <form asp-action="Index" method="get" class="d-flex">
+                    <input type="number" style="width:300px" name="page" class="form-control" placeholder="Numer strony" min="1" max="@Model.TotalPages" required />
+                    <input type="hidden" name="size" value="@Model.Size" />
+                    <button type="submit" class="btn btn-primary">Przejdź</button>
+                </form>
+            </li>
+        </div>
+    </ul>
+</nav>
